@@ -16,7 +16,7 @@ Read-only configuration checks, ingestion validation, controlled evidence genera
 | [Legacy VM cost utility](PowerShellScripts/README-AVD-Azure-Cost-Analysis-Costs-Per-VM.md) | Authentication, cost attribution, correctness risks and modernization guidance for `PowerShellScripts/AVD_AzureCostAnalysis_CostsPerVM.ps1` |
 | [Full inventory assessment prototype](PowerShellScripts/README-AVD-Full-Inventory-Fetch.md) | Retained analysis only — the script `AVD_Full_Inventory_Fetch_working.txt` is **missing from the repository** |
 | [Inventory reporting plug-in](PowerShellScripts/README-AVD-Inventory01.md) | External framework contract, tag row model and Excel dependencies for `PowerShellScripts/AVD_Inventory01.ps1` |
-| [AVD KQL pack](KQL/README-AVD-KQL-Pack.md) | Six corrected queries in `AVD_KQL_Pack.txt`, verified against a live workspace, plus the original defects as an appendix |
+| [AVD KQL pack](KQL/README-AVD-KQL-Pack.md) | Six corrected queries in [`KQL/AVD_KQL_Pack.txt`](KQL/AVD_KQL_Pack.txt), verified against a live workspace, plus the original defects as an appendix |
 | [ANF FIO performance test](PowerShellScripts/README-AVD-NetApp-Performance-Test.md) | Hardening status, remaining review findings, capacity impact and required preflight for `PowerShellScripts/AVD_NetApp_Perf_Test01_v0.1.ps1` |
 | `altprof_setup_1.0.0.40.exe` | Third-party ALTProf installer binary, downloaded and still carrying mark of the web. It is **not** part of this package, has no companion README and is not referenced by any script here. Do not execute it as part of a monitoring assessment; verify its provenance independently or remove it. |
 

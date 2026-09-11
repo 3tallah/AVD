@@ -91,7 +91,7 @@ Get-Item -LiteralPath '.\PowerShellScripts\AVD-Get-Hostpool-Image-information.ps
 Unblock-File -LiteralPath '.\PowerShellScripts\AVD-Get-Hostpool-Image-information.ps1'
 ```
 
-No PowerShell file in this folder currently carries the stream. Only `AVD_KQL_Pack.txt` and the unrelated `altprof_setup_1.0.0.40.exe` binary still do.
+No PowerShell file in this folder currently carries the stream. Only `../KQL/AVD_KQL_Pack.txt` and the unrelated `altprof_setup_1.0.0.40.exe` binary still do.
 
 ## Workflow
 

@@ -1,6 +1,6 @@
 # AVD KQL Pack
 
-> **Corrected and verified.** `AVD_KQL_Pack.txt` was a draft in which all six queries failed: the headings used SQL comment syntax and several tables and columns did not exist. It has been rewritten against the current Azure Monitor AVD schema. All six queries were executed against Log Analytics workspace `LAW-WPNS-AVD` on 2026-09-11 and every one returned rows. The original defects are kept in [Appendix: original queries and their defects](#appendix-original-queries-and-their-defects).
+> **Corrected and verified.** [`AVD_KQL_Pack.txt`](AVD_KQL_Pack.txt) was a draft in which all six queries failed: the headings used SQL comment syntax and several tables and columns did not exist. It has been rewritten against the current Azure Monitor AVD schema. All six queries were executed against Log Analytics workspace `LAW-WPNS-AVD` on 2026-09-11 and every one returned rows. The original defects are kept in [Appendix: original queries and their defects](#appendix-original-queries-and-their-defects).
 
 ## Queries
 
@@ -76,7 +76,7 @@ union withsource=TableName isfuzzy=true
 
 ## Appendix: original queries and their defects
 
-> **Do not run the queries in this appendix.** Every one of them fails. They are kept only as a record of what was corrected. The queries you want are in `AVD_KQL_Pack.txt`, listed under [Queries](#queries).
+> **Do not run the queries in this appendix.** Every one of them fails. They are kept only as a record of what was corrected. The queries you want are in [`AVD_KQL_Pack.txt`](AVD_KQL_Pack.txt), listed under [Queries](#queries).
 
 Kept as a record of what was corrected, and because the same mistakes recur in AVD query samples found online.
 
