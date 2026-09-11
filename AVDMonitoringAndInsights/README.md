@@ -6,40 +6,40 @@ Read-only configuration checks, ingestion validation, controlled evidence genera
 
 | Folder | Contents |
 | --- | --- |
-| [Script execution report](AVD-Script-Execution-Report.md) | Verified live-run results for all 19 scripts in this folder and `MonitoringAndInsights`, with the defects and environment findings each run surfaced |
-| [MonitoringAndInsights](MonitoringAndInsights/README.md) | The complete script set: prerequisites, host pool and AVD Workspace diagnostic settings, DCR/AMA association, per-host monitoring, the interactive single-pass host report, Log Analytics ingestion, the multi-host report orchestrator, the test-event generator and the local diagnostic bundle collector |
+| [Script execution report](PowerShellScripts/AVD-Script-Execution-Report.md) | Verified live-run results for all 19 scripts in this folder and `PowerShellScripts`, with the defects and environment findings each run surfaced |
+| [PowerShellScripts](PowerShellScripts/README.md) | The complete script set: prerequisites, host pool and AVD Workspace diagnostic settings, DCR/AMA association, per-host monitoring, the interactive single-pass host report, Log Analytics ingestion, the multi-host report orchestrator, the test-event generator and the local diagnostic bundle collector |
 | [KQL](KQL/README.md) | Thirty-eight queries: twenty-five base queries plus thirteen chart-view (`render`) companions |
-| [Get-AVDHostPoolImageInformation.ps1](Get-AVDHostPoolImageInformation.ps1) | Modern replacement for the legacy host-pool image utility: uses the current Azure sign-in, requires an explicit subscription, matches session hosts exactly and also reports the image actually deployed on each session host |
-| [Legacy host-pool image metadata utility](README-AVD-Get-Hostpool-Image-Information.md) | Usage, security notes, limitations and modernization guidance for `AVD-Get-Hostpool-Image-information.ps1` |
-| [Legacy logon-duration analyzer](README-AVD-Analyze-Logon-Duration.md) | Operating modes, privileged preparation, evidence handling and review findings for `AVD_AnalyzeLogonDuration.ps1` |
-| [AVD assessment collector](README-AVD-Assessment-Collector.md) | Azure inventory, session host health, evidence provenance, HTML reporting and exit codes for `AVD-Assessment-Collector.ps1` |
-| [Legacy VM cost utility](README-AVD-Azure-Cost-Analysis-Costs-Per-VM.md) | Authentication, cost attribution, correctness risks and modernization guidance for `AVD_AzureCostAnalysis_CostsPerVM.ps1` |
-| [Full inventory assessment prototype](README-AVD-Full-Inventory-Fetch.md) | Retained analysis only — the script `AVD_Full_Inventory_Fetch_working.txt` is **missing from the repository** |
-| [Inventory reporting plug-in](README-AVD-Inventory01.md) | External framework contract, tag row model and Excel dependencies for `AVD_Inventory01.ps1` |
-| [AVD KQL pack](README-AVD-KQL-Pack.md) | Six corrected queries in `AVD_KQL_Pack.txt`, verified against a live workspace, plus the original defects as an appendix |
-| [ANF FIO performance test](README-AVD-NetApp-Performance-Test.md) | Hardening status, remaining review findings, capacity impact and required preflight for `AVD_NetApp_Perf_Test01_v0.1.ps1` |
+| [Get-AVDHostPoolImageInformation.ps1](PowerShellScripts/Get-AVDHostPoolImageInformation.ps1) | Modern replacement for the legacy host-pool image utility: uses the current Azure sign-in, requires an explicit subscription, matches session hosts exactly and also reports the image actually deployed on each session host |
+| [Legacy host-pool image metadata utility](PowerShellScripts/README-AVD-Get-Hostpool-Image-Information.md) | Usage, security notes, limitations and modernization guidance for `PowerShellScripts/AVD-Get-Hostpool-Image-information.ps1` |
+| [Legacy logon-duration analyzer](PowerShellScripts/README-AVD-Analyze-Logon-Duration.md) | Operating modes, privileged preparation, evidence handling and review findings for `PowerShellScripts/AVD_AnalyzeLogonDuration.ps1` |
+| [AVD assessment collector](PowerShellScripts/README-AVD-Assessment-Collector.md) | Azure inventory, session host health, evidence provenance, HTML reporting and exit codes for `PowerShellScripts/AVD-Assessment-Collector.ps1` |
+| [Legacy VM cost utility](PowerShellScripts/README-AVD-Azure-Cost-Analysis-Costs-Per-VM.md) | Authentication, cost attribution, correctness risks and modernization guidance for `PowerShellScripts/AVD_AzureCostAnalysis_CostsPerVM.ps1` |
+| [Full inventory assessment prototype](PowerShellScripts/README-AVD-Full-Inventory-Fetch.md) | Retained analysis only — the script `AVD_Full_Inventory_Fetch_working.txt` is **missing from the repository** |
+| [Inventory reporting plug-in](PowerShellScripts/README-AVD-Inventory01.md) | External framework contract, tag row model and Excel dependencies for `PowerShellScripts/AVD_Inventory01.ps1` |
+| [AVD KQL pack](KQL/README-AVD-KQL-Pack.md) | Six corrected queries in `AVD_KQL_Pack.txt`, verified against a live workspace, plus the original defects as an appendix |
+| [ANF FIO performance test](PowerShellScripts/README-AVD-NetApp-Performance-Test.md) | Hardening status, remaining review findings, capacity impact and required preflight for `PowerShellScripts/AVD_NetApp_Perf_Test01_v0.1.ps1` |
 | `altprof_setup_1.0.0.40.exe` | Third-party ALTProf installer binary, downloaded and still carrying mark of the web. It is **not** part of this package, has no companion README and is not referenced by any script here. Do not execute it as part of a monitoring assessment; verify its provenance independently or remove it. |
 
 ## Suggested order
 
-For WPNS-AVD, begin with the [monitoring guide](MonitoringAndInsights/README.md). Verify Azure configuration, inspect every session host, generate controlled events, exercise a real AVD session, and check ingestion. A visible host in Insights is not evidence that service or guest telemetry is arriving.
+For WPNS-AVD, begin with the [monitoring guide](PowerShellScripts/README.md). Verify Azure configuration, inspect every session host, generate controlled events, exercise a real AVD session, and check ingestion. A visible host in Insights is not evidence that service or guest telemetry is arriving.
 
 ## Host pool image reporting
 
-[Get-AVDHostPoolImageInformation.ps1](Get-AVDHostPoolImageInformation.ps1) reports what a host pool was built from and what its session hosts actually run. It is read-only, uses the current `Connect-AzAccount` sign-in, installs nothing and restores the caller's Azure context.
+[Get-AVDHostPoolImageInformation.ps1](PowerShellScripts/Get-AVDHostPoolImageInformation.ps1) reports what a host pool was built from and what its session hosts actually run. It is read-only, uses the current `Connect-AzAccount` sign-in, installs nothing and restores the caller's Azure context.
 
 ```powershell
 # Every host pool and session host in a subscription
-.\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>'
+.\PowerShellScripts\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>'
 
 # One host pool
-.\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>' -ResourceGroupName 'WPNS-AVD' -HostPoolName 'WPNS-AVD' | Format-List
+.\PowerShellScripts\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>' -ResourceGroupName 'WPNS-AVD' -HostPoolName 'WPNS-AVD' | Format-List
 
 # Resolve the owning host pool from a session host, by NetBIOS name or FQDN
-.\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>' -SessionHostName 'WPNS-AVD-0'
+.\PowerShellScripts\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>' -SessionHostName 'WPNS-AVD-0'
 
 # Template data only; no Az.Compute required
-.\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>' -SkipSessionHostImage | Export-Csv .\avd-images.csv -NoTypeInformation
+.\PowerShellScripts\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>' -SkipSessionHostImage | Export-Csv .\avd-images.csv -NoTypeInformation
 
 # Write a plain-text report as well; objects still reach the pipeline
 # If Az.Accounts/Az.DesktopVirtualization/Az.Compute have side-by-side versions installed (see Troubleshooting
@@ -47,7 +47,7 @@ For WPNS-AVD, begin with the [monitoring guide](MonitoringAndInsights/README.md)
 Import-Module Az.Accounts -MinimumVersion 5.5.0 -ErrorAction Stop
 Import-Module Az.DesktopVirtualization -ErrorAction Stop
 Import-Module Az.Compute -ErrorAction Stop
-.\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>' -ResourceGroupName 'WPNS-AVD' -HostPoolName 'WPNS-AVD' -OutputPath .\avd-image-report.txt | Out-Null
+.\PowerShellScripts\Get-AVDHostPoolImageInformation.ps1 -SubscriptionId '<subscription-id>' -ResourceGroupName 'WPNS-AVD' -HostPoolName 'WPNS-AVD' -OutputPath .\avd-image-report.txt | Out-Null
 ```
 
 One object is emitted per session host, or one per host pool when session hosts are not queried. Key fields:
@@ -123,13 +123,13 @@ Open a new PowerShell session to work around it. To fix it permanently, uninstal
 
 ## Safety notes
 
-The maintained scripts under [MonitoringAndInsights](MonitoringAndInsights/README.md) do not install modules automatically or change execution policy. Test scripts are read-only. The event generator writes two labeled test events; the bundle collector writes local evidence files and only runs explicitly requested connectivity probes. Both support -WhatIf.
+The maintained scripts under [PowerShellScripts](PowerShellScripts/README.md) do not install modules automatically or change execution policy. Test scripts are read-only. The event generator writes two labeled test events; the bundle collector writes local evidence files and only runs explicitly requested connectivity probes. Both support -WhatIf.
 
-The top-level legacy host-pool image metadata utility is an exception: it installs missing NuGet and PowerShell module prerequisites with `-Force` and `-AllowClobber`. Review its [companion README](README-AVD-Get-Hostpool-Image-Information.md) before running it.
+The top-level legacy host-pool image metadata utility is an exception: it installs missing NuGet and PowerShell module prerequisites with `-Force` and `-AllowClobber`. Review its [companion README](PowerShellScripts/README-AVD-Get-Hostpool-Image-Information.md) before running it.
 
-The top-level legacy logon-duration analyzer is also an exception. Its preparation mode changes audit and event-log settings, and its package mode exports sensitive diagnostic evidence. It does not support `-WhatIf`, and offline analysis is not fully isolated from the analysis host. Review its [companion README](README-AVD-Analyze-Logon-Duration.md) before use.
+The top-level legacy logon-duration analyzer is also an exception. Its preparation mode changes audit and event-log settings, and its package mode exports sensitive diagnostic evidence. It does not support `-WhatIf`, and offline analysis is not fully isolated from the analysis host. Review its [companion README](PowerShellScripts/README-AVD-Analyze-Logon-Duration.md) before use.
 
-The other top-level artifacts are reviewed prototypes or legacy utilities rather than members of the maintained package. In particular, the full-inventory prototype is missing from the repository altogether, and the ANF FIO script, while now runnable, remains destructive by design. Follow each companion README and prefer the maintained `MonitoringAndInsights` and `KQL` packages where they overlap.
+The other top-level artifacts are reviewed prototypes or legacy utilities rather than members of the maintained package. In particular, the full-inventory prototype is missing from the repository altogether, and the ANF FIO script, while now runnable, remains destructive by design. Follow each companion README and prefer the maintained `PowerShellScripts` and `KQL` packages where they overlap.
 
 The `Zone.Identifier` alternate data stream has since been cleared from every PowerShell file in this tree, so none of them now fail under a `RemoteSigned` execution policy with `is not digitally signed`. Re-verified on 2026-09-11: only `AVD_KQL_Pack.txt` and `altprof_setup_1.0.0.40.exe` still carry the stream, and neither is executed by PowerShell. If you re-download any of these scripts, the stream returns — that is mark of the web, not the execution policy. Review the contents, then clear it with `Unblock-File`.
 
@@ -137,7 +137,7 @@ The `Zone.Identifier` alternate data stream has since been cleared from every Po
 
 The reviewed top-level PowerShell artifacts all parse cleanly. `AVD_NetApp_Perf_Test01_v0.1.ps1` previously reported four parser errors beginning at line 206; the root cause was a single non-ASCII en dash in a BOM-less file (Windows PowerShell decodes such files as Windows-1252, where one of its bytes becomes a smart quote that opens a string). The file is now pure ASCII, parses with zero errors, and has been hardened with `-WhatIf`/`-Confirm` support, parameter bounds validation, defensive JSON parsing and automatic cleanup of its multi-GB test files. It has been dry-run verified but a real FIO workload has still never been executed, and it remains destructive by design: it saturates the target volume for the full run duration. The six queries in `AVD_KQL_Pack.txt` were corrected and then executed against workspace `LAW-WPNS-AVD` on 2026-09-11, all six returning rows. The `KQL` package queries, including the chart companions, were reviewed but not run against a live workspace, apart from `AVD-NetworkData.kql`. Follow each companion README, use an isolated test environment and review the per-check results.
 
-All 19 PowerShell scripts in this folder and in `MonitoringAndInsights` were also scanned with PSScriptAnalyzer 1.25.0. Every `Error`-severity and genuinely actionable `Warning` finding has been resolved. The remaining findings are accepted: `PSAvoidUsingWriteHost` (these are interactive console tools), `PSAvoidGlobalVars` (confined to the vendor logon-duration analyzer), `PSReviewUnusedParameter` false positives where parameters are referenced only inside interpolated strings or nested functions, and one `PSAvoidUsingConvertToSecureStringWithPlainText` in the ControlUp image utility, where converting form-entered input into a `PSCredential` for encrypted storage is the intended behaviour.
+All 19 PowerShell scripts in this folder and in `PowerShellScripts` were also scanned with PSScriptAnalyzer 1.25.0. Every `Error`-severity and genuinely actionable `Warning` finding has been resolved. The remaining findings are accepted: `PSAvoidUsingWriteHost` (these are interactive console tools), `PSAvoidGlobalVars` (confined to the vendor logon-duration analyzer), `PSReviewUnusedParameter` false positives where parameters are referenced only inside interpolated strings or nested functions, and one `PSAvoidUsingConvertToSecureStringWithPlainText` in the ControlUp image utility, where converting form-entered input into a `PSCredential` for encrypted storage is the intended behaviour.
 
 ### Re-validation, 2026-09-11
 
@@ -164,9 +164,9 @@ Every other script in this folder has now been executed against the live `WPNS-A
 | --- | --- |
 | `Get-AVDHostPoolImageInformation.ps1` | Works — `Image lookup : Succeeded=2` |
 | `AVD_AnalyzeLogonDuration.ps1` | Works elevated — produced a 6.5 s logon report |
-| `MonitoringAndInsights/Test-*.ps1` (5 scripts) | All ran; see that folder's README for the per-script table |
-| `MonitoringAndInsights/New-AVDMonitoringTestEvents.ps1` | `-WhatIf` correct; `-RunId` must be a GUID |
-| `MonitoringAndInsights/Collect-AVDDiagnosticBundle.ps1` | `-WhatIf` correct |
+| `PowerShellScripts/Test-*.ps1` (5 scripts) | All ran; see that folder's README for the per-script table |
+| `PowerShellScripts/New-AVDMonitoringTestEvents.ps1` | `-WhatIf` correct; `-RunId` must be a GUID |
+| `PowerShellScripts/Collect-AVDDiagnosticBundle.ps1` | `-WhatIf` correct |
 | `AVD-Get-Hostpool-Image-information.ps1` | Blocked — requires the ControlUp credential file |
 | `AVD_AzureCostAnalysis_CostsPerVM.ps1` | Blocked — requires the ControlUp credential file |
 | `AVD-Assessment-Collector.ps1` | Rewritten (v2.0) and verified — 13 artifacts, HTML report, exits non-zero on missing evidence |
@@ -177,7 +177,7 @@ Every other script in this folder has now been executed against the live `WPNS-A
 Two defects found by execution are not visible from code review alone:
 
 - `AVD_Full_Inventory_Fetch_working.txt` uses `$host`, an automatic read-only variable, as a `foreach` loop variable at line 1135. It aborts before any CSV export whenever a host pool actually contains session hosts, so it yields zero files. It appears to succeed only when discovery returns nothing. **The file is no longer present in the repository**, so there is nothing to fix in-tree; the analysis and the suggested rename are kept in its companion README in case the script is restored.
-- `AVD-Assessment-Collector.ps1` continued after a failed `Connect-AzAccount`, silently reused the pre-existing Azure context, printed `Done.`, exited `0`, and never wrote `Errors.txt`. **This has been fixed:** the collector was rewritten to v2.0, which reuses the current context deliberately, distinguishes empty results from failures, writes a manifest with per-artifact status and SHA256 hashes, produces an HTML report, and exits non-zero when evidence is missing. See [the collector README](README-AVD-Assessment-Collector.md) for the full before/after list.
+- `AVD-Assessment-Collector.ps1` continued after a failed `Connect-AzAccount`, silently reused the pre-existing Azure context, printed `Done.`, exited `0`, and never wrote `Errors.txt`. **This has been fixed:** the collector was rewritten to v2.0, which reuses the current context deliberately, distinguishes empty results from failures, writes a manifest with per-artifact status and SHA256 hashes, produces an HTML report, and exits non-zero when evidence is missing. See [the collector README](PowerShellScripts/README-AVD-Assessment-Collector.md) for the full before/after list.
 
 The live run also surfaced three environment issues worth acting on: the `Perf` table held zero rows over 24 hours despite a passing DCR association and a fresh AMA heartbeat; two overlapping DCRs (`DCR-AVD-CostOptimized` and `WPNS-AVD-DCR`) define duplicate counters and bill twice; and both session hosts' AVD agent heartbeats are several days stale.
 

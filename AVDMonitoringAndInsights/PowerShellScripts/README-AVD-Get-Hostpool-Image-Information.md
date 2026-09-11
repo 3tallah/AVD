@@ -54,7 +54,7 @@ Review and install approved module versions before running the script in a contr
 Run the script from Windows PowerShell 5.1 under the Windows account that owns the credential file, from the folder that contains it:
 
 ```powershell
-& '.\AVD-Get-Hostpool-Image-information.ps1' `
+& '.\PowerShellScripts\AVD-Get-Hostpool-Image-information.ps1' `
     -SessionHostName 'avd-sh-01' `
     -Verbose
 ```
@@ -69,26 +69,26 @@ The script has no `-OutputPath` parameter; it was written as a ControlUp Script 
 To capture a file, redirect the pipeline output and accept that the `Write-Host` headers will still only appear on screen, not in the file. Paste this as a single line — some PowerShell console hosts echo the `>>` continuation prompt back as literal text when a multi-line piped command is pasted, which then fails with `The term '>>' is not recognized`:
 
 ```powershell
-& '.\AVD-Get-Hostpool-Image-information.ps1' -SessionHostName 'avd-sh-01' | Format-List | Out-File -FilePath '.\avd-hostpool-image-legacy-report.txt' -Encoding utf8
+& '.\PowerShellScripts\AVD-Get-Hostpool-Image-information.ps1' -SessionHostName 'avd-sh-01' | Format-List | Out-File -FilePath '.\avd-hostpool-image-legacy-report.txt' -Encoding utf8
 ```
 
 To capture everything, including the `Write-Host` headers, transcript the whole run instead:
 
 ```powershell
 Start-Transcript -Path '.\avd-hostpool-image-legacy-report.txt'
-& '.\AVD-Get-Hostpool-Image-information.ps1' -SessionHostName 'avd-sh-01'
+& '.\PowerShellScripts\AVD-Get-Hostpool-Image-information.ps1' -SessionHostName 'avd-sh-01'
 Stop-Transcript
 ```
 
-For a defined, file-based report use [Get-AVDHostPoolImageInformation.ps1](Get-AVDHostPoolImageInformation.ps1)'s `-OutputPath` parameter instead; see the [top-level README](README.md#host-pool-image-reporting).
+For a defined, file-based report use [Get-AVDHostPoolImageInformation.ps1](Get-AVDHostPoolImageInformation.ps1)'s `-OutputPath` parameter instead; see the [top-level README](../README.md#host-pool-image-reporting).
 
 ### Execution policy and mark of the web
 
 This file was downloaded, so it originally carried a `Zone.Identifier` alternate data stream. Under the common `RemoteSigned` execution policy that makes it a remote script, and PowerShell refuses it with `is not digitally signed`. The effective policy is not the problem; the stream is. **As of 2026-09-11 the stream has been cleared in-tree, so the script is no longer blocked.** If you re-download it, check and clear the stream again after reviewing the contents:
 
 ```powershell
-Get-Item -LiteralPath '.\AVD-Get-Hostpool-Image-information.ps1' -Stream Zone.Identifier
-Unblock-File -LiteralPath '.\AVD-Get-Hostpool-Image-information.ps1'
+Get-Item -LiteralPath '.\PowerShellScripts\AVD-Get-Hostpool-Image-information.ps1' -Stream Zone.Identifier
+Unblock-File -LiteralPath '.\PowerShellScripts\AVD-Get-Hostpool-Image-information.ps1'
 ```
 
 No PowerShell file in this folder currently carries the stream. Only `AVD_KQL_Pack.txt` and the unrelated `altprof_setup_1.0.0.40.exe` binary still do.

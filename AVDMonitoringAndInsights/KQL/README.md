@@ -2,7 +2,7 @@
 
 KQL queries for the Log Analytics workspace used by Azure Virtual Desktop (AVD) monitoring. They verify that telemetry is actually arriving, and then inspect connections, errors, agent health, network/graphics data, transport, client versions and guest-OS (Event/Perf) data.
 
-These queries support the [monitoring and insights guide](../README.md). The PowerShell validation scripts live in the [MonitoringAndInsights folder](../MonitoringAndInsights/).
+These queries support the [monitoring and insights guide](../README.md). The PowerShell validation scripts live in the [PowerShellScripts folder](../PowerShellScripts/).
 
 ## Contents
 
@@ -29,7 +29,7 @@ The folder holds **38 `.kql` files**: 25 base queries and 13 `*Chart.kql` compan
 
 ## Cost-optimized host monitoring
 
-These queries discover session hosts from the `Computer` column in `Perf` or `Event`; they do not require a hard-coded host list. They are designed for the DCR created by [Set-AVDCostOptimizedMonitoring.ps1](../MonitoringAndInsights/Set-AVDCostOptimizedMonitoring.ps1), but remain useful with any compatible Event/Perf collection.
+These queries discover session hosts from the `Computer` column in `Perf` or `Event`; they do not require a hard-coded host list. They are designed for the DCR created by [Set-AVDCostOptimizedMonitoring.ps1](../PowerShellScripts/Set-AVDCostOptimizedMonitoring.ps1), but remain useful with any compatible Event/Perf collection.
 
 | Query | Source table | What it answers |
 | --- | --- | --- |
@@ -129,7 +129,7 @@ The service-reported `TransportType` per connection from `WVDConnections`, with 
 
 ### AVD-SessionHostEvents.kql
 
-Host Windows events collected by AMA into `Event`. With defaults it lists all collected events (filterable by `ComputerFilter`). For end-to-end validation, set `OnlyValidationEvents = true` and paste the `RunId` returned by [`New-AVDMonitoringTestEvents.ps1`](../MonitoringAndInsights/New-AVDMonitoringTestEvents.ps1) — it matches `Source == "AVD-Monitoring-Validation"` and event IDs 9001/9002, proving the whole pipeline (host → AMA → DCR → workspace) works.
+Host Windows events collected by AMA into `Event`. With defaults it lists all collected events (filterable by `ComputerFilter`). For end-to-end validation, set `OnlyValidationEvents = true` and paste the `RunId` returned by [`New-AVDMonitoringTestEvents.ps1`](../PowerShellScripts/New-AVDMonitoringTestEvents.ps1) — it matches `Source == "AVD-Monitoring-Validation"` and event IDs 9001/9002, proving the whole pipeline (host → AMA → DCR → workspace) works.
 
 ### AVD-PerformanceCounters.kql (alias: AVD-SessionHostPerformance.kql)
 

@@ -117,7 +117,7 @@ This query has three independent defects, and each one hides the next. Confirmed
 2. With the heading corrected, the column fails to resolve: `'summarize' operator: Failed to resolve scalar expression named 'TransportProtocol'`.
 3. Renaming that column to `TransportType` makes the query run, but `State == "Failed"` matches nothing, so every row returns `Failures = 0` and `FailureRate = 0`. That is the dangerous case: a clean result set that is silently wrong. The workspace holds only `Completed`, `Started` and `Connected`.
 
-Now query 1 in the pack, which counts one attempt per `CorrelationId` and derives failures from `WVDErrors`. See also [AVD-Connections.kql](KQL/AVD-Connections.kql) and [AVD-ConnectionFailures.kql](KQL/AVD-ConnectionFailures.kql).
+Now query 1 in the pack, which counts one attempt per `CorrelationId` and derives failures from `WVDErrors`. See also [AVD-Connections.kql](AVD-Connections.kql) and [AVD-ConnectionFailures.kql](AVD-ConnectionFailures.kql).
 
 ### Network RTT
 
@@ -152,7 +152,7 @@ Now query 2 in the pack. What changed:
 | Row multiplication       | Not considered                     | `arg_max` collapses to one connection row per correlation before the join |
 | Lookback                 | Portal time picker only            | `let Lookback = 7d;`                                                      |
 
-See also [AVD-NetworkData.kql](KQL/AVD-NetworkData.kql), which adds an empty-table guard and a host pool filter, and [AVD-RDPShortpath.kql](KQL/AVD-RDPShortpath.kql).
+See also [AVD-NetworkData.kql](AVD-NetworkData.kql), which adds an empty-table guard and a host pool filter, and [AVD-RDPShortpath.kql](AVD-RDPShortpath.kql).
 
 ### Disconnect and reconnect
 
@@ -168,7 +168,7 @@ WVDEvents
 
 The documented schema does not include `WVDEvents` or the proposed `EventName` values. `WVDConnections.PredecessorConnectionId` identifies automatic reconnect relationships; broader disconnect analysis requires a documented lifecycle/error correlation.
 
-Now query 3 in the pack, which reports lifecycle `State` and flags auto-reconnects. See also [AVD-Connections.kql](KQL/AVD-Connections.kql) and [AVD-Errors.kql](KQL/AVD-Errors.kql).
+Now query 3 in the pack, which reports lifecycle `State` and flags auto-reconnects. See also [AVD-Connections.kql](AVD-Connections.kql) and [AVD-Errors.kql](AVD-Errors.kql).
 
 ### Agent versions
 
@@ -196,7 +196,7 @@ KQL stops at the first unresolved name, so correcting `SessionHostName` alone wo
 | `WVDCheckpoints` | `ActivityType`, `CorrelationId`, `Name`, `Parameters`, `Source`, `SourceSystem`, `TenantId`, `TimeGenerated`, `Type`, `UserName`, `_ResourceId` |
 | `WVDAgentHealthStatus` | `ActiveSessions`, `AgentVersion`, `AllowNewSessions`, `EndpointState`, `InactiveSessions`, `LastHeartBeat`, `LastUpgradeTimeStamp`, `OSVersion`, `OperationName`, `SessionHostHealthCheckResult`, `SessionHostName`, `SessionHostResourceId`, `SourceSystem`, `Status`, `StatusTimeStamp`, `SxSStackVersion`, `TenantId`, `TimeGenerated`, `Type`, `UpgradeErrorMsg`, `UpgradeState`, `_ResourceId` |
 
-Now query 4 in the pack. See also [AVD-AgentHealth.kql](KQL/AVD-AgentHealth.kql).
+Now query 4 in the pack. See also [AVD-AgentHealth.kql](AVD-AgentHealth.kql).
 
 ### Logon duration
 
@@ -225,7 +225,7 @@ Confirmed in the workspace:
 
 That listing also settles two other defects at once: there is no `TransportProtocol`, only `TransportType`.
 
-Now query 5 in the pack, which computes the `Started` to `Connected` gap per `CorrelationId` and drops correlations missing either row rather than counting them as zero. Against this workspace it measured 18 logons on `WPNS-AVD-0`, averaging 10.6 s with a 30.6 s maximum. For per-session logon breakdowns on the host itself, see the [logon-duration analyzer](README-AVD-Analyze-Logon-Duration.md).
+Now query 5 in the pack, which computes the `Started` to `Connected` gap per `CorrelationId` and drops correlations missing either row rather than counting them as zero. Against this workspace it measured 18 logons on `WPNS-AVD-0`, averaging 10.6 s with a 30.6 s maximum. For per-session logon breakdowns on the host itself, see the [logon-duration analyzer](../PowerShellScripts/README-AVD-Analyze-Logon-Duration.md).
 
 ### Host utilization
 
@@ -241,17 +241,17 @@ WVDEvents
 
 The proposed `SessionHostPerformanceData`, `TotalCpuUsage` and `TotalMemoryUsage` fields are not part of a documented `WVDEvents` table. Use the `Perf` table with explicitly collected CPU, memory and session counters.
 
-Now query 6 in the pack, which reads `Perf` and reports CPU and memory in one result. Note that `Perf.Computer` is the guest hostname and will not always match `SessionHostName`. See also [AVD-CPUByHost.kql](KQL/AVD-CPUByHost.kql), [AVD-MemoryByHost.kql](KQL/AVD-MemoryByHost.kql) and [AVD-SessionHostPerformance.kql](KQL/AVD-SessionHostPerformance.kql).
+Now query 6 in the pack, which reads `Perf` and reports CPU and memory in one result. Note that `Perf.Computer` is the guest hostname and will not always match `SessionHostName`. See also [AVD-CPUByHost.kql](AVD-CPUByHost.kql), [AVD-MemoryByHost.kql](AVD-MemoryByHost.kql) and [AVD-SessionHostPerformance.kql](AVD-SessionHostPerformance.kql).
 
 ## Related Queries
 
-The [KQL package](KQL/README.md) covers the same ground in more depth, with empty-table guards, optional host pool and user filters, and chart companions:
+The [KQL package](README.md) covers the same ground in more depth, with empty-table guards, optional host pool and user filters, and chart companions:
 
-- [Connections](KQL/AVD-Connections.kql), [Connection failures](KQL/AVD-ConnectionFailures.kql)
-- [Network data](KQL/AVD-NetworkData.kql), [RDP Shortpath](KQL/AVD-RDPShortpath.kql)
-- [Agent health](KQL/AVD-AgentHealth.kql)
-- [CPU by host](KQL/AVD-CPUByHost.kql), [Memory by host](KQL/AVD-MemoryByHost.kql)
-- [Overall host health](KQL/AVD-OverallHostHealth.kql)
+- [Connections](AVD-Connections.kql), [Connection failures](AVD-ConnectionFailures.kql)
+- [Network data](AVD-NetworkData.kql), [RDP Shortpath](AVD-RDPShortpath.kql)
+- [Agent health](AVD-AgentHealth.kql)
+- [CPU by host](AVD-CPUByHost.kql), [Memory by host](AVD-MemoryByHost.kql)
+- [Overall host health](AVD-OverallHostHealth.kql)
 
 Use this pack for a quick six-query sweep; use the package when you need filtering, guards against missing tables, or rendered charts.
 
@@ -259,7 +259,7 @@ Use this pack for a quick six-query sweep; use the package when you need filteri
 
 Run the table census under [Required Data](#required-data) first, then inspect schemas with `<TableName> | getschema` and validate a small time-bounded sample.
 
-The rewritten pack was validated by reading each query from `AVD_KQL_Pack.txt` and submitting it to the workspace query API, rather than by inspection. Results are in [Verification](#verification). The maintained [AVD-NetworkData.kql](KQL/AVD-NetworkData.kql) was run in the same workspace and also returned rows.
+The rewritten pack was validated by reading each query from `AVD_KQL_Pack.txt` and submitting it to the workspace query API, rather than by inspection. Results are in [Verification](#verification). The maintained [AVD-NetworkData.kql](AVD-NetworkData.kql) was run in the same workspace and also returned rows.
 
 Every defect listed below has since been reproduced against the workspace, except `RoundTripTimeMs`, which stays masked because the `WVDEvents` table error fires first. Column claims were checked with `getschema` rather than taken from documentation.
 

@@ -148,4 +148,4 @@ Use the prototype only for exploratory inventory after independently checking sa
 - [Azure Monitor supported metrics](https://learn.microsoft.com/azure/azure-monitor/reference/supported-metrics/metrics-index)
 - [Azure Virtual Desktop Insights](https://learn.microsoft.com/azure/virtual-desktop/insights)
 - [Azure Virtual Desktop RBAC roles](https://learn.microsoft.com/azure/virtual-desktop/rbac)
-- [Maintained KQL pack](KQL/README.md)
+- [Maintained KQL pack](../KQL/README.md)

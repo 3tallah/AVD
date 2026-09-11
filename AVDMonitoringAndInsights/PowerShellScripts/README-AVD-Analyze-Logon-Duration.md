@@ -52,7 +52,7 @@ The script hard-fails early with `This script must be run with administrative pr
 ### Online analysis
 
 ```powershell
-& '.\AVD_AnalyzeLogonDuration.ps1' `
+& '.\PowerShellScripts\AVD_AnalyzeLogonDuration.ps1' `
     -DomainUser 'CONTOSO\user1' `
     -SessionID 4 `
     -SessionName 'RDP-Tcp#4' `
@@ -65,7 +65,7 @@ The target user must have a relevant local session. Specify `SessionID` when con
 ### Prepare a test machine
 
 ```powershell
-& '.\AVD_AnalyzeLogonDuration.ps1' `
+& '.\PowerShellScripts\AVD_AnalyzeLogonDuration.ps1' `
     -DomainUser 'CONTOSO\user1' `
     -PrepMachine 100 `
     -Verbose
@@ -76,7 +76,7 @@ The target user must have a relevant local session. Specify `SessionID` when con
 ### Capture an evidence package
 
 ```powershell
-& '.\AVD_AnalyzeLogonDuration.ps1' `
+& '.\PowerShellScripts\AVD_AnalyzeLogonDuration.ps1' `
     -DomainUser 'CONTOSO\user1' `
     -SessionID 4 `
     -SessionName 'RDP-Tcp#4' `
@@ -87,7 +87,7 @@ The target user must have a relevant local session. Specify `SessionID` when con
 ### Analyze a captured package
 
 ```powershell
-& '.\AVD_AnalyzeLogonDuration.ps1' `
+& '.\PowerShellScripts\AVD_AnalyzeLogonDuration.ps1' `
     -OfflineAnalysis 'C:\Temp\ALD-user1-session4' `
     -Verbose
 ```

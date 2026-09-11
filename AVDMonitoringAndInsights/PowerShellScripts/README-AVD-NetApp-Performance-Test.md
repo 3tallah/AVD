@@ -1,6 +1,6 @@
 # Azure NetApp Files FIO Performance Test
 
-> **Still unvalidated against real storage:** `AVD_NetApp_Perf_Test01_v0.1.ps1` stresses an Azure NetApp Files SMB path. The two blockers that previously stopped it from running at all are now fixed (see below), but the script has **never been executed end to end** and remains a destructive workload. Revalidate it in an isolated test environment before any storage workload.
+> **Still unvalidated against real storage:** `PowerShellScripts/AVD_NetApp_Perf_Test01_v0.1.ps1` stresses an Azure NetApp Files SMB path. The two blockers that previously stopped it from running at all are now fixed (see below), but the script has **never been executed end to end** and remains a destructive workload. Revalidate it in an isolated test environment before any storage workload.
 
 ## Purpose
 

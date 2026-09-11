@@ -25,7 +25,7 @@ The script uses a client secret and the legacy Microsoft Entra OAuth v1 token en
 ## Usage
 
 ```powershell
-& '.\AVD_AzureCostAnalysis_CostsPerVM.ps1' `
+& '.\PowerShellScripts\AVD_AzureCostAnalysis_CostsPerVM.ps1' `
     -vmName 'avd-sh-01' `
     -Verbose
 ```
@@ -45,12 +45,12 @@ To keep a copy of a run, redirect the pipeline output to a file, or transcript t
 
 ```powershell
 # Pipeline output only (the cost rows written to the success stream)
-& '.\AVD_AzureCostAnalysis_CostsPerVM.ps1' -vmName 'avd-sh-01' |
+& '.\PowerShellScripts\AVD_AzureCostAnalysis_CostsPerVM.ps1' -vmName 'avd-sh-01' |
     Out-File -FilePath 'C:\Temp\avd-cost-avd-sh-01.txt' -Encoding utf8
 
 # Everything shown on screen, including Write-Host/Write-Verbose lines
 Start-Transcript -Path 'C:\Temp\avd-cost-avd-sh-01.txt'
-& '.\AVD_AzureCostAnalysis_CostsPerVM.ps1' -vmName 'avd-sh-01' -Verbose
+& '.\PowerShellScripts\AVD_AzureCostAnalysis_CostsPerVM.ps1' -vmName 'avd-sh-01' -Verbose
 Stop-Transcript
 ```
 

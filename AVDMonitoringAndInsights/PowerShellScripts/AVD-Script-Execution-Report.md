@@ -1,7 +1,7 @@
 # AVD PowerShell Script Execution Report
 
 Full execution pass over every PowerShell script in `AVDMonitoringAndInsights\` and
-`AVDMonitoringAndInsights\MonitoringAndInsights\`.
+`AVDMonitoringAndInsights\PowerShellScripts\`.
 
 | | |
 |---|---|
@@ -28,13 +28,13 @@ captured to `logs\<script>.log` and artifacts written under `artifacts\`.
 
 | # | Script | Folder | Exit | Outcome |
 |---|---|---|---|---|
-| 1 | `AVD_AnalyzeLogonDuration.ps1` | root | 0 | ✅ Ran elevated; produced a 6.5 s logon breakdown |
-| 2 | `AVD_AzureCostAnalysis_CostsPerVM.ps1` | root | 99 | ⛔ Blocked — missing ControlUp SP credential file |
-| 3 | `AVD_Inventory01.ps1` | root | 0 | ➖ No output by design (plug-in, not standalone) |
-| 4 | `AVD_NetApp_Perf_Test01_v0.1.ps1` | root | — | ❌ At run time: 4 parse errors. **Fixed since (D4)** — now parses clean and `-WhatIf` dry-run verified; still destructive, real FIO run outstanding |
-| 5 | `AVD-Assessment-Collector.ps1` | root | 0 | ✅ 13 artifacts, 0 zero-byte, HTML report |
-| 6 | `AVD-Get-Hostpool-Image-information.ps1` | root | 99 | ⛔ Blocked — missing ControlUp SP credential file |
-| 7 | `Get-AVDHostPoolImageInformation.ps1` | root | 0 | ✅ CSV for both session hosts, image resolved |
+| 1 | `AVD_AnalyzeLogonDuration.ps1` | PowerShellScripts | 0 | ✅ Ran elevated; produced a 6.5 s logon breakdown |
+| 2 | `AVD_AzureCostAnalysis_CostsPerVM.ps1` | PowerShellScripts | 99 | ⛔ Blocked — missing ControlUp SP credential file |
+| 3 | `AVD_Inventory01.ps1` | PowerShellScripts | 0 | ➖ No output by design (plug-in, not standalone) |
+| 4 | `AVD_NetApp_Perf_Test01_v0.1.ps1` | PowerShellScripts | — | ❌ At run time: 4 parse errors. **Fixed since (D4)** — now parses clean and `-WhatIf` dry-run verified; still destructive, real FIO run outstanding |
+| 5 | `AVD-Assessment-Collector.ps1` | PowerShellScripts | 0 | ✅ 13 artifacts, 0 zero-byte, HTML report |
+| 6 | `AVD-Get-Hostpool-Image-information.ps1` | PowerShellScripts | 99 | ⛔ Blocked — missing ControlUp SP credential file |
+| 7 | `Get-AVDHostPoolImageInformation.ps1` | PowerShellScripts | 0 | ✅ CSV for both session hosts, image resolved |
 | 8 | `Collect-AVDDiagnosticBundle.ps1` | monitoring | 0 | ⚠️ 43 checks / 10 findings — **but 32 MB of junk JSON** |
 | 9 | `Invoke-AVDMonitoringReportUpload.ps1` | monitoring | 1 | ✅ Failed gracefully as designed (payload script) |
 | 10 | `Invoke-AVDSessionHostReport.ps1` | monitoring | 0 | ⚠️ Ran read-only; storage account unreachable |
@@ -133,7 +133,7 @@ are same`). Every FIO invocation would have failed before FIO started.
 
 | ID | File | Change | Verification |
 |---|---|---|---|
-| **D1** | `MonitoringAndInsights\README.md` | New section *"Always materialize output before calling `exit`"* with the measured evidence and a correct wrapper pattern. | Documented; no code change needed (the scripts themselves are correct). |
+| **D1** | `PowerShellScripts\README.md` | New section *"Always materialize output before calling `exit`"* with the measured evidence and a correct wrapper pattern. | Documented; no code change needed (the scripts themselves are correct). |
 | **D2** | `Collect-AVDDiagnosticBundle.ps1` L195, L197 | Replaced raw CIM output with `[pscustomobject]` projections for `NetworkConfiguration` and `DNSServers`. | Executed the two `Capture` scriptblocks straight from the file: **32,659,132 B → 11,657 B (−99.96%)**. |
 | **D3** | `AVD_AnalyzeLogonDuration.ps1` L4942 | `Gap (s)` column now emits `''` unless `TimeDelta -is [TimeSpan]`. | All three shapes exercised — `TimeSpan` → `4.0`, `''` → `''`, `$null` → `''`. Old expression errored on `''`. |
 | **D4** | `AVD_NetApp_Perf_Test01_v0.1.ps1` L206, L75-99 | En dash → ASCII hyphen (file is now pure ASCII); stderr redirected to a separate `.err.txt`; `$args` renamed to `$fioArgs` to stop shadowing the automatic variable. | `ParseFile` → **0 errors**; `Start-Process` same-file rejection reproduced and confirmed resolved by separate paths. |

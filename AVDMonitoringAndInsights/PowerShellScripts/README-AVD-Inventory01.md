@@ -35,7 +35,7 @@ Reporting mode requires the ImportExcel module commands `New-ConditionalText`, `
 Processing mode, called by an orchestrator:
 
 ```powershell
-$rows = & '.\AVD_Inventory01.ps1' `
+$rows = & '.\PowerShellScripts\AVD_Inventory01.ps1' `
     -Sub $subscriptions `
     -Resources $resourceGraphRows `
     -Task 'Processing' `
@@ -46,7 +46,7 @@ Reporting mode:
 
 ```powershell
 Import-Module ImportExcel
-& '.\AVD_Inventory01.ps1' `
+& '.\PowerShellScripts\AVD_Inventory01.ps1' `
     -Task 'Reporting' `
     -SmaResources $smaResources `
     -File 'C:\Temp\Azure-Inventory.xlsx' `
@@ -67,7 +67,7 @@ Reporting writes an `AVD` worksheet and table to the path in `File`.
 ## Review Findings
 
 - The script cannot run meaningfully without an external resource-collection and reporting framework.
-- **Verified by execution:** invoking `.\AVD_Inventory01.ps1 -Task 'Processing' -Sub @() -Resources @() -InTag $true` completes with exit code `0` and returns nothing. Every parameter is untyped `[Object]` with no validation or mandatory flag, so the script accepts any input and silently produces no output rather than reporting that it was given no resources. A clean run proves only that it parsed, never that an inventory was collected.
+- **Verified by execution:** invoking `.\PowerShellScripts\AVD_Inventory01.ps1 -Task 'Processing' -Sub @() -Resources @() -InTag $true` completes with exit code `0` and returns nothing. Every parameter is untyped `[Object]` with no validation or mandatory flag, so the script accepts any input and silently produces no output rather than reporting that it was given no resources. A clean run proves only that it parsed, never that an inventory was collected.
 - Any `Task` typo selects reporting instead of rejecting an invalid mode.
 - The calculated `Domain` removes the first dot-delimited segment and leaves a leading dot for an FQDN; names without dots produce an empty value.
 - Missing VM matches silently produce rows with blank VM fields, so orphaned session hosts are not clearly identified.

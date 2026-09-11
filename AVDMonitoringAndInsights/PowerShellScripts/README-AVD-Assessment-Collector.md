@@ -49,7 +49,7 @@ Every parameter listed is implemented. `-HostPoolName` without `-ResourceGroup` 
 The script is unsigned and may carry a `Zone.Identifier` stream from download, which `RemoteSigned` rejects with `is not digitally signed`. The in-tree copy was verified stream-free on 2026-09-11, but if you obtain it another way, review the contents and unblock it once:
 
 ```powershell
-Unblock-File -LiteralPath '.\AVD-Assessment-Collector.ps1'
+Unblock-File -LiteralPath '.\PowerShellScripts\AVD-Assessment-Collector.ps1'
 ```
 
 ### Full collection for one host pool
@@ -57,7 +57,7 @@ Unblock-File -LiteralPath '.\AVD-Assessment-Collector.ps1'
 ```powershell
 Connect-AzAccount
 
-& '.\AVD-Assessment-Collector.ps1' `
+& '.\PowerShellScripts\AVD-Assessment-Collector.ps1' `
     -SubscriptionId '00000000-0000-0000-0000-000000000000' `
     -ResourceGroup 'WPNS-AVD' `
     -HostPoolName 'WPNS-AVD' `
@@ -67,7 +67,7 @@ Connect-AzAccount
 ### Azure inventory only, from an admin workstation
 
 ```powershell
-& '.\AVD-Assessment-Collector.ps1' -Scope Azure -OutputPath 'C:\Temp\AVD-Assessment'
+& '.\PowerShellScripts\AVD-Assessment-Collector.ps1' -Scope Azure -OutputPath 'C:\Temp\AVD-Assessment'
 ```
 
 ### Local evidence only, on a session host
@@ -75,7 +75,7 @@ Connect-AzAccount
 Run elevated for complete registry, event log and FSLogix coverage:
 
 ```powershell
-& '.\AVD-Assessment-Collector.ps1' -Scope Local -EventLogDays 3 -IncludeSecurityLog `
+& '.\PowerShellScripts\AVD-Assessment-Collector.ps1' -Scope Local -EventLogDays 3 -IncludeSecurityLog `
     -OutputPath 'C:\Temp\AVD-Assessment'
 ```
 
@@ -84,7 +84,7 @@ Run elevated for complete registry, event log and FSLogix coverage:
 The collector returns a result object and sets a process exit code, so it can gate a pipeline:
 
 ```powershell
-$result = & '.\AVD-Assessment-Collector.ps1' -Scope Azure -OutputPath 'C:\Temp\AVD-Assessment'
+$result = & '.\PowerShellScripts\AVD-Assessment-Collector.ps1' -Scope Azure -OutputPath 'C:\Temp\AVD-Assessment'
 
 if ($LASTEXITCODE -ne 0) {
     throw "AVD collection incomplete: $($result.ArtifactsInError) artifact(s) in error."
@@ -222,7 +222,7 @@ Each run writes to its own timestamped folder, so evidence from separate runs ca
 ## Known limitations
 
 - Azure inventory and local evidence still describe different machines unless the collector runs on a session host. The manifest records which, but does not correlate them.
-- Findings cover only the checks listed above. A clean report is not a complete AVD health assessment; pair it with the checks in `MonitoringAndInsights/`.
+- Findings cover only the checks listed above. A clean report is not a complete AVD health assessment; pair it with the checks in `PowerShellScripts/`.
 - Health check data is only as fresh as the AVD agent's last report. A host with a stale heartbeat may also have stale health results.
 - The collector reads Azure Resource Manager only. It does not query Log Analytics, so it cannot confirm that telemetry is actually being ingested.
 
