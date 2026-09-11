@@ -8,7 +8,7 @@ Read-only configuration checks, ingestion validation, controlled evidence genera
 | --- | --- |
 | [Script execution report](AVD-Script-Execution-Report.md) | Verified live-run results for all 19 scripts in this folder and `MonitoringAndInsights`, with the defects and environment findings each run surfaced |
 | [MonitoringAndInsights](MonitoringAndInsights/README.md) | The complete script set: prerequisites, host pool and AVD Workspace diagnostic settings, DCR/AMA association, per-host monitoring, the interactive single-pass host report, Log Analytics ingestion, the multi-host report orchestrator, the test-event generator and the local diagnostic bundle collector |
-| [KQL](KQL/README.md) | Twenty-eight queries: fifteen base queries plus thirteen chart-view (`render`) companions |
+| [KQL](KQL/README.md) | Thirty-eight queries: twenty-five base queries plus thirteen chart-view (`render`) companions |
 | [Get-AVDHostPoolImageInformation.ps1](Get-AVDHostPoolImageInformation.ps1) | Modern replacement for the legacy host-pool image utility: uses the current Azure sign-in, requires an explicit subscription, matches session hosts exactly and also reports the image actually deployed on each session host |
 | [Legacy host-pool image metadata utility](README-AVD-Get-Hostpool-Image-Information.md) | Usage, security notes, limitations and modernization guidance for `AVD-Get-Hostpool-Image-information.ps1` |
 | [Legacy logon-duration analyzer](README-AVD-Analyze-Logon-Duration.md) | Operating modes, privileged preparation, evidence handling and review findings for `AVD_AnalyzeLogonDuration.ps1` |
@@ -17,7 +17,8 @@ Read-only configuration checks, ingestion validation, controlled evidence genera
 | [Full inventory assessment prototype](README-AVD-Full-Inventory-Fetch.md) | Retained analysis only — the script `AVD_Full_Inventory_Fetch_working.txt` is **missing from the repository** |
 | [Inventory reporting plug-in](README-AVD-Inventory01.md) | External framework contract, tag row model and Excel dependencies for `AVD_Inventory01.ps1` |
 | [AVD KQL pack](README-AVD-KQL-Pack.md) | Six corrected queries in `AVD_KQL_Pack.txt`, verified against a live workspace, plus the original defects as an appendix |
-| [ANF FIO performance test](README-AVD-NetApp-Performance-Test.md) | Current execution blockers, capacity impact and required preflight for `AVD_NetApp_Perf_Test01_v0.1.ps1` |
+| [ANF FIO performance test](README-AVD-NetApp-Performance-Test.md) | Hardening status, remaining review findings, capacity impact and required preflight for `AVD_NetApp_Perf_Test01_v0.1.ps1` |
+| `altprof_setup_1.0.0.40.exe` | Third-party ALTProf installer binary, downloaded and still carrying mark of the web. It is **not** part of this package, has no companion README and is not referenced by any script here. Do not execute it as part of a monitoring assessment; verify its provenance independently or remove it. |
 
 ## Suggested order
 
@@ -130,13 +131,32 @@ The top-level legacy logon-duration analyzer is also an exception. Its preparati
 
 The other top-level artifacts are reviewed prototypes or legacy utilities rather than members of the maintained package. In particular, the full-inventory prototype is missing from the repository altogether, and the ANF FIO script, while now runnable, remains destructive by design. Follow each companion README and prefer the maintained `MonitoringAndInsights` and `KQL` packages where they overlap.
 
-The six downloaded top-level PowerShell files still carry a `Zone.Identifier` alternate data stream, so under a `RemoteSigned` execution policy they fail with `is not digitally signed`. That is mark of the web, not the execution policy. Review the contents, then clear the stream with `Unblock-File`. The scripts under `MonitoringAndInsights` and `Get-AVDHostPoolImageInformation.ps1` were authored locally and are not affected.
+The `Zone.Identifier` alternate data stream has since been cleared from every PowerShell file in this tree, so none of them now fail under a `RemoteSigned` execution policy with `is not digitally signed`. Re-verified on 2026-09-11: only `AVD_KQL_Pack.txt` and `altprof_setup_1.0.0.40.exe` still carry the stream, and neither is executed by PowerShell. If you re-download any of these scripts, the stream returns — that is mark of the web, not the execution policy. Review the contents, then clear it with `Unblock-File`.
 
 ## Validation status
 
 The reviewed top-level PowerShell artifacts all parse cleanly. `AVD_NetApp_Perf_Test01_v0.1.ps1` previously reported four parser errors beginning at line 206; the root cause was a single non-ASCII en dash in a BOM-less file (Windows PowerShell decodes such files as Windows-1252, where one of its bytes becomes a smart quote that opens a string). The file is now pure ASCII, parses with zero errors, and has been hardened with `-WhatIf`/`-Confirm` support, parameter bounds validation, defensive JSON parsing and automatic cleanup of its multi-GB test files. It has been dry-run verified but a real FIO workload has still never been executed, and it remains destructive by design: it saturates the target volume for the full run duration. The six queries in `AVD_KQL_Pack.txt` were corrected and then executed against workspace `LAW-WPNS-AVD` on 2026-09-11, all six returning rows. The `KQL` package queries, including the chart companions, were reviewed but not run against a live workspace, apart from `AVD-NetworkData.kql`. Follow each companion README, use an isolated test environment and review the per-check results.
 
 All 19 PowerShell scripts in this folder and in `MonitoringAndInsights` were also scanned with PSScriptAnalyzer 1.25.0. Every `Error`-severity and genuinely actionable `Warning` finding has been resolved. The remaining findings are accepted: `PSAvoidUsingWriteHost` (these are interactive console tools), `PSAvoidGlobalVars` (confined to the vendor logon-duration analyzer), `PSReviewUnusedParameter` false positives where parameters are referenced only inside interpolated strings or nested functions, and one `PSAvoidUsingConvertToSecureStringWithPlainText` in the ControlUp image utility, where converting form-entered input into a `PSCredential` for encrypted storage is the intended behaviour.
+
+### Re-validation, 2026-09-11
+
+The whole tree was re-validated after the entries above were written. Results:
+
+| Check | Result |
+| --- | --- |
+| PowerShell AST parse, all 19 `.ps1` | 0 errors |
+| PSScriptAnalyzer 1.25.0, `Error` severity | 1 finding, the accepted `ConvertTo-SecureString` case in `AVD-Get-Hostpool-Image-information.ps1` line 258 |
+| PSScriptAnalyzer, `Warning` severity | 468 findings, all in the accepted categories above; the `PSPossibleIncorrectComparisonWithNull` and `PSAvoidAssignmentToAutomaticVariable` hits are confined to the vendor `AVD_AnalyzeLogonDuration.ps1` |
+| Comment-based help | Present in 18 of 19 scripts; `AVD_Inventory01.ps1` is a plug-in fragment with no help block by design |
+| Relative Markdown links, all README files | 0 broken |
+| `.kql` inventory | 38 files: 25 base, 13 chart companions |
+| Duplicate `.kql` files | `AVD-AllTelemetryTables` and `AVD-SessionHostPerformance` confirmed SHA256-identical to their originals |
+| DCR content claims in `Set-AVDCostOptimizedMonitoring.ps1` | Confirmed: 14 counters, 60 s sampling, 6 event XPath queries, `transformKql = source` |
+| Default counter list in `Test-AVDSessionHostMonitoring.ps1` | Confirmed: 20 counters, 4 event channels |
+| Mark of the web | No longer present on any `.ps1`; only `AVD_KQL_Pack.txt` and `altprof_setup_1.0.0.40.exe` retain the stream |
+
+Three documentation defects were corrected by this pass: the KQL query count was understated as 28 (fifteen base), the claim that every base query has a `*Chart.kql` companion was untrue for the ten cost-optimized host queries, and the mark-of-the-web note described six blocked PowerShell files that are no longer blocked. The undocumented `altprof_setup_1.0.0.40.exe` binary is now called out in the package layout.
 
 Every other script in this folder has now been executed against the live `WPNS-AVD` environment. Results:
 

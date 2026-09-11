@@ -339,7 +339,18 @@ Three real findings came out of that run and are worth acting on:
 2. **Two overlapping DCRs are associated with both session hosts** — `DCR-AVD-CostOptimized` and `WPNS-AVD-DCR` — and they define duplicate counters such as `\Processor Information(_Total)\% Processor Time`. Overlapping DCRs ingest the same sample twice and bill twice. Consolidate to one.
 3. **AVD agent heartbeats are stale.** `WPNS-AVD-0` last reported 2026-09-07 and `WPNS-AVD-1` on 2026-09-04, against a current date of 2026-09-11. Stale agent health is independent of AMA health; check the AVD agent and the hosts' registration state.
 
-Elevated scripts must be started from an elevated session. Files retrieved from the internet also carry a `Zone.Identifier` stream and need `Unblock-File` before the first run under `RemoteSigned`.
+Elevated scripts must be started from an elevated session. Files retrieved from the internet also carry a `Zone.Identifier` stream and need `Unblock-File` before the first run under `RemoteSigned`; no script in this folder currently carries one.
+
+## Static validation
+
+Re-verified on 2026-09-11 across all 12 scripts in this folder:
+
+- PowerShell AST parse: **0 errors**.
+- PSScriptAnalyzer 1.25.0: **0 `Error`-severity findings**. Remaining warnings are the accepted `PSAvoidUsingWriteHost` (these are interactive console tools) and `PSReviewUnusedParameter` false positives where parameters are used only inside interpolated strings or nested functions.
+- Comment-based help present in every script.
+- `Set-AVDCostOptimizedMonitoring.ps1` DCR content matches this README: 14 counters, 60-second sampling, 6 Event XPath queries, `transformKql = source`.
+- `Test-AVDSessionHostMonitoring.ps1` defaults match this README: 20 counters and 4 event channels.
+- All relative links in this README resolve.
 
 ## References
 
