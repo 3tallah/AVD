@@ -1,5 +1,7 @@
 # Azure Virtual Desktop Troubleshooting Queries
 
+## KQL Queries
+
 ## 1. AVD Available Bandwidth Percentiles, 10-Minute Trend
 
 ```kusto
@@ -267,57 +269,7 @@ WVDConnections
 | order by TimeGenerated desc
 ```
 
-## 10. Check Session Host RDP Transport Policy
-
-```powershell
-# Check Session Host RDP Transport Policy
-# SelectTransport = 1 means TCP only.
-# SelectTransport = 2 means UDP or TCP.
-# A missing value means the default behavior applies.
-
-Get-ItemProperty `
-"HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" `
--Name SelectTransport `
--ErrorAction SilentlyContinue
-```
-
-## 11. Check Client UDP Policy
-
-```powershell
-# Check Client UDP Policy
-# fClientDisableUDP = 1 disables UDP.
-# 0 or a missing value means UDP is allowed.
-
-Get-ItemProperty `
-"HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Client" `
--Name fClientDisableUDP `
--ErrorAction SilentlyContinue
-```
-
-## 12. Verify RDP Shortpath UDP 3390 Listener
-
-```powershell
-# Verify RDP Shortpath UDP Listener
-# Confirms that the Session Host is listening on UDP port 3390.
-# This check applies to managed/private network Shortpath scenarios.
-
-Get-NetUDPEndpoint |
-Where-Object LocalPort -eq 3390
-```
-
-## 13. Check RDP and Shortpath Firewall Rules
-
-```powershell
-# Check RDP / Shortpath Firewall Rules
-# Displays Remote Desktop and Shortpath-related firewall rules.
-# Use this to confirm that the required UDP path is not blocked by Windows Firewall.
-
-Get-NetFirewallRule |
-Where-Object DisplayName -Match "Shortpath|Remote Desktop" |
-Select-Object DisplayName, Enabled, Direction, Action
-```
-
-## 14. TCP vs RDP Shortpath RTT Comparison
+## 10. TCP vs RDP Shortpath RTT Comparison
 
 ```kusto
 // TCP vs RDP Shortpath RTT Comparison
@@ -356,4 +308,56 @@ WVDConnectionNetworkData
     xtitle="Transport",
     ytitle="RTT (ms)"
 )
+```
+
+## PowerShell Checks
+
+## 11. Check Session Host RDP Transport Policy
+
+```powershell
+# Check Session Host RDP Transport Policy
+# SelectTransport = 1 means TCP only.
+# SelectTransport = 2 means UDP or TCP.
+# A missing value means the default behavior applies.
+
+Get-ItemProperty `
+"HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" `
+-Name SelectTransport `
+-ErrorAction SilentlyContinue
+```
+
+## 12. Check Client UDP Policy
+
+```powershell
+# Check Client UDP Policy
+# fClientDisableUDP = 1 disables UDP.
+# 0 or a missing value means UDP is allowed.
+
+Get-ItemProperty `
+"HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Client" `
+-Name fClientDisableUDP `
+-ErrorAction SilentlyContinue
+```
+
+## 13. Verify RDP Shortpath UDP 3390 Listener
+
+```powershell
+# Verify RDP Shortpath UDP Listener
+# Confirms that the Session Host is listening on UDP port 3390.
+# This check applies to managed/private network Shortpath scenarios.
+
+Get-NetUDPEndpoint |
+Where-Object LocalPort -eq 3390
+```
+
+## 14. Check RDP and Shortpath Firewall Rules
+
+```powershell
+# Check RDP / Shortpath Firewall Rules
+# Displays Remote Desktop and Shortpath-related firewall rules.
+# Use this to confirm that the required UDP path is not blocked by Windows Firewall.
+
+Get-NetFirewallRule |
+Where-Object DisplayName -Match "Shortpath|Remote Desktop" |
+Select-Object DisplayName, Enabled, Direction, Action
 ```
